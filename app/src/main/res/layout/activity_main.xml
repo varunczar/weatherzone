@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="app.com.weatherzone.core.MainActivity">
+
+    <ProgressBar
+        android:id="@+id/imageLoadProgressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/message_no_results_found"
+        android:textColor="@color/colorAccent"
+        android:layout_centerInParent="true"
+        android:textStyle="bold"
+        android:id="@+id/errorMessage"
+        android:textSize="@dimen/message"
+        />
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/swipeRefreshLayout"
+        >
+    <ListView
+        android:id="@+id/resultsview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@color/colorPrimary"
+        android:dividerHeight="@dimen/divider_height"
+        android:layout_alignParentTop="true"></ListView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</RelativeLayout>

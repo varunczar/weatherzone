@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Image Search</string>
+    <string name="message_no_results_found">No Results Found</string>
+    <string name="hint_search">Search</string>
+    <string name="loadmore_text">Loading More...</string>
+    <string name="consumer_key"></string>
+</resources>
