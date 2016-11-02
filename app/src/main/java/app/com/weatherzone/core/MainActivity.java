@@ -96,7 +96,9 @@ public class MainActivity extends AppCompatActivity implements CallbackControlle
         //Disable display of App name in the action bar
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         //Construct UI elements
+        Log.d(Constants.TAG,getClass().getName()+"onCreate - Setting up UI");
         setUpUI();
+        Log.d(Constants.TAG,getClass().getName()+"onCreate - Done setting up UI");
         //Initialise the connection helper
         connectionUtils=new ConnectionUtils(this,this,apiResponse);
         //Set page number to 1
@@ -141,6 +143,8 @@ public class MainActivity extends AppCompatActivity implements CallbackControlle
      */
     private void registerReceiver()
     {
+        Log.d(Constants.TAG,getClass().getName()+"registerReceiver - Registering network state " +
+                "change receiver");
         //Initialise network state change receiver
         networkStateReceiver = new NetworkStateReceiver();
         //Add listener and set it to the current activity
@@ -148,6 +152,8 @@ public class MainActivity extends AppCompatActivity implements CallbackControlle
         //Register the network change receiver
         this.registerReceiver(networkStateReceiver,
                 new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+        Log.d(Constants.TAG,getClass().getName()+"registerReceiver - Done registering network state " +
+                "change receiver");
 
     }
 
@@ -157,6 +163,8 @@ public class MainActivity extends AppCompatActivity implements CallbackControlle
      * @param searchData - search parameter to perform a search call on
      */
     private void fetchData(String searchData) {
+        Log.d(Constants.TAG,getClass().getName()+"fetchData - Fetching data for search " +
+                "term "+searchData);
         imageLoadProgressBar.setVisibility(View.VISIBLE);
         errorMessage.setVisibility(View.GONE);
         this.searchTerm=searchData;
@@ -170,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements CallbackControlle
     private SwipeRefreshLayout.OnRefreshListener resetListener = new SwipeRefreshLayout.OnRefreshListener() {
         @Override
         public void onRefresh() {
+            Log.d(Constants.TAG,getClass().getName()+"resetListener - Resetting data");
             swipeRefreshLayout.setRefreshing(true);
             //Reset pageNumber to 1
             pageNumber=1;
@@ -187,6 +196,8 @@ public class MainActivity extends AppCompatActivity implements CallbackControlle
     @Override
     public void processImageData(APIResponse apiResponse)
     {
+        Log.d(Constants.TAG,getClass().getName()+"processImageData - Response received");
+        Log.d(Constants.TAG,getClass().getName()+"processImageData - Populating UI elements");
         this.apiResponse=apiResponse;
         //Hide the progress bar
         imageLoadProgressBar.setVisibility(View.GONE);
@@ -211,6 +222,7 @@ public class MainActivity extends AppCompatActivity implements CallbackControlle
         {
             swipeRefreshLayout.setRefreshing(false);
         }
+        Log.d(Constants.TAG,getClass().getName()+"processImageData - Done populating UI elements");
     }
 
     /**
@@ -261,9 +273,13 @@ public class MainActivity extends AppCompatActivity implements CallbackControlle
     @Override
     public void networkAvailable() {
         //If connection was lost retry connection
+        Log.d(Constants.TAG,getClass().getName()+"networkAvailable - If connection was lost retry " +
+                "connection");
         if(lostConnectivityFlag)
         {
             lostConnectivityFlag=false;
+            Log.d(Constants.TAG,getClass().getName()+"networkAvailable - Connection was lost midway" +
+                    "retrying connection");
             fetchData(searchTerm);
         }
 
@@ -299,6 +315,11 @@ public class MainActivity extends AppCompatActivity implements CallbackControlle
         //number of pages in the resultset fetch data for the next page number
         if (numberOfItems >= totalItemCount && !isLoading && pageNumber<apiResponse.getTotalPages()) {
             isLoading = true;
+            Log.d(Constants.TAG,getClass().getName()+"onScroll - End of list reached " );
+            Log.d(Constants.TAG,getClass().getName()+"onScroll - Number of items fetched "+numberOfItems );
+
+
+
             //Create and display a progress bar at the footer of the list
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             footer = (LinearLayout) inflater.inflate(R.layout.footer_layout, null);
@@ -306,6 +327,8 @@ public class MainActivity extends AppCompatActivity implements CallbackControlle
             //Calculate the next pagenumber
             int nextPageNumber = apiResponse.getCurrentPageNumber();
             pageNumber=++nextPageNumber;
+            Log.d(Constants.TAG,getClass().getName()+"onScroll - Fetching data for Page Number"
+                    +pageNumber );
             fetchData(searchTerm);
         }
     }
@@ -324,6 +347,7 @@ public class MainActivity extends AppCompatActivity implements CallbackControlle
         super.onDestroy();
         //Unregister the network state change receiver
         if(networkStateReceiver != null) {
+            Log.d(Constants.TAG,getClass().getName()+"onDestroy - Unregistering receiver" );
             unregisterReceiver(networkStateReceiver);
         }
     }

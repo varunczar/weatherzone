@@ -31,6 +31,7 @@ public class Utils {
      */
     public static String getTime(String utcTime) throws Exception
     {
+
         //Parse incoming utcTime
         Date intermediate = sdf.parse(utcTime);
         //Format and return human readable timestamp

@@ -1,6 +1,7 @@
 package app.com.weatherzone.utils;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -63,6 +64,8 @@ public class ConnectionUtils implements RestApiCallback {
     public void fetchAndProcessImageData(String search, int pageNumber)
     {
         try {
+            Log.d(Constants.TAG,getClass().getName()+"fetchAndProcessImageData - Performing" +
+                    "fetch operation for "+search+" and pageNumber "+pageNumber );
             //Construct the url by replacing placeholders for search term and page number
             String resultantURL = Constants.IMAGE_SEARCH_URL.replace(Constants.PLACEHOLDER_TERM,
                     //Encode the search term in UTF-8 to handle spaces in the search parameter
@@ -76,6 +79,8 @@ public class ConnectionUtils implements RestApiCallback {
         catch (Exception e)
         {
             //Process error response
+            Log.d(Constants.TAG,getClass().getName()+"fetchAndProcessImageData - Unable to parse " +
+                    "search" );
             processErrorResponse(Constants.KEY_GENERIC_ERROR,"Unable to parse search");
         }
     }
@@ -89,6 +94,8 @@ public class ConnectionUtils implements RestApiCallback {
     public void processResponse(String response)
     {
         //Invoke the Response Processor
+        Log.d(Constants.TAG,getClass().getName()+"processResponse - Performing" +
+                "parse and populate by invoking ResponseProcessor" );
         new ResponseProcessor().execute(response);
     }
 
@@ -102,6 +109,7 @@ public class ConnectionUtils implements RestApiCallback {
     {
         //If Network error, set the lost connectivity flag to true
         if(Constants.KEY_CONNECTION_ERROR==key) {
+            Log.d(Constants.TAG,getClass().getName()+"processErrorResponse - Connection lost" );
             mainActivity.setLostConnectivityFlag(true);
         }
         //Show the error message to the user
@@ -128,6 +136,7 @@ public class ConnectionUtils implements RestApiCallback {
             String response=params[0];
             try {
                 //Create a new apiResponse Instance if null
+                Log.d(Constants.TAG,getClass().getName()+"doInBackground - Parsing received data" );
                 if (apiResponse == null) {
                     apiResponse = new APIResponse();
 
@@ -195,10 +204,12 @@ public class ConnectionUtils implements RestApiCallback {
 
                     }
                 }
+                Log.d(Constants.TAG,getClass().getName()+"doInBackground - Done parsing received data" );
             }
             catch(Exception e)
             {
                 //Process failed to parse error
+                Log.d(Constants.TAG,getClass().getName()+"doInBackground - Failed to parse data" );
                 processErrorResponse(Constants.KEY_GENERIC_ERROR,"Failed to parse");
             }
             return apiResponse;
@@ -212,6 +223,8 @@ public class ConnectionUtils implements RestApiCallback {
         protected void onPostExecute(APIResponse apiResponse)
         {
             //Call the callbackController to process the apiResponse instance
+            Log.d(Constants.TAG,getClass().getName()+"onPostExecute - calling callbackController " +
+                    "to process the apiResponse instance" );
             callbackController.processImageData(apiResponse);
         }
 

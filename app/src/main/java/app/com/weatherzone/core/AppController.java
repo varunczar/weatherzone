@@ -65,6 +65,7 @@ public class AppController {
      * @param context - Application context
      */
     public <T> void addToRequestQueue(Request<T> req,Context context) {
+        Log.d(Constants.TAG,"Adding Request to Queue");
         req.setTag(TAG);
         //Set a retry policy for the Volley request
         req.setRetryPolicy(new DefaultRetryPolicy(

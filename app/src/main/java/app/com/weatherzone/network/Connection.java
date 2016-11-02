@@ -48,6 +48,8 @@ public class Connection {
             public void onResponse(String response) {
                 //Process the response when received by invoking the process method in the calling
                 //interface
+                Log.d(Constants.TAG,getClass().getName()+"getData - Success" );
+
                 restApiCallback.processResponse(response.toString());
 
             }
@@ -56,7 +58,7 @@ public class Connection {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(Constants.TAG, "Error: " + error.getMessage());
-
+                Log.d(Constants.TAG,getClass().getName()+"getData - Error "+error.getMessage() );
                 if (error instanceof NoConnectionError) {
                     //Process a connectivity error
                     restApiCallback.processErrorResponse(Constants.KEY_CONNECTION_ERROR,"No internet Access, Check your internet connection.");

@@ -5,9 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import app.com.weatherzone.utils.Constants;
 
 /**
  * This class handles changes in network connectivity
@@ -44,10 +47,12 @@ public class NetworkStateReceiver extends BroadcastReceiver {
         NetworkInfo ni = manager.getActiveNetworkInfo();
         //Set connectivity flag to true if connected to the network
         if(ni != null && ni.getState() == NetworkInfo.State.CONNECTED) {
+            Log.d(Constants.TAG,getClass().getName()+"onReceive - Connected to network" );
             connected = true;
         }
         //Set connectivity flag to false if disconnected from the network
         else if(intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY,Boolean.FALSE)) {
+            Log.d(Constants.TAG,getClass().getName()+"onReceive - Disconnected from network" );
             connected = false;
         }
         //Notify to all listeners
@@ -70,11 +75,18 @@ public class NetworkStateReceiver extends BroadcastReceiver {
         if(connected == null || listener == null)
             return;
         //Notify that network is available
-        if(connected == true)
+        if(connected == true) {
+            Log.d(Constants.TAG, getClass().getName() + "notifyState - Performing network available" +
+                    "post-operations");
             listener.networkAvailable();
+        }
         //Notify that network is unavailable
         else
+        {
+            Log.d(Constants.TAG,getClass().getName()+"notifyState - Performing network unavailable" +
+                    "post-operations" );
             listener.networkUnavailable();
+        }
     }
 
     /**
